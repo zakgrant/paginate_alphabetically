@@ -8,10 +8,10 @@ module PaginateAlphabetically
     end
 
     module ClassMethods
-      def pagination_letters(collection=nil)
+      def pagination_letters(filter=nil)
         return ALL_LETTERS if @paginate_alphabetically__show_all_letters
-        collection = collection.nil? ? all : collection
-        collection.sort_by{|obj| obj.send(@attribute).upcase}.group_by {|group| group.send(@attribute)[0].chr.upcase}.keys
+        records = filter.nil? ? all : self.send(:where, filter)
+        records.sort_by{|obj| obj.send(@attribute).upcase}.group_by {|group| group.send(@attribute)[0].chr.upcase}.keys
       end
 
       def first_letter

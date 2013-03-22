@@ -15,18 +15,18 @@ describe PaginateAlphabetically do
       Thing.paginate_alphabetically :by => :name, :show_all_letters => false
     end
 
-    context 'collection provided' do
+    context 'filter provided' do
       before :each do
-        @collection = %w(seven Eight Nine).map {|name| Thing.create!(:name => name)}
+        @filter = { :name => %w{one two} }
       end
 
       it 'picks out the correct letters from the set' do
-        Thing.pagination_letters(@collection).should == %w{E N S}
+        Thing.pagination_letters(@filter).should == %w{O T}
       end
 
       it 'shows all letters always when asked' do
         Thing.paginate_alphabetically :by => :name, :show_all_letters => true
-        Thing.pagination_letters(@collection).should == ('A'..'Z').to_a
+        Thing.pagination_letters(@filter).should == ('A'..'Z').to_a
       end
     end
 
