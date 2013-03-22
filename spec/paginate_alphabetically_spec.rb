@@ -11,13 +11,34 @@ describe PaginateAlphabetically do
   end
 
   context '#pagination_letters' do
-    it 'picks out the correct letters from the set' do
-      Thing.pagination_letters.should == ['F', 'O', 'S', 'T']
+    before :each do
+      Thing.paginate_alphabetically :by => :name, :show_all_letters => false
     end
 
-    it 'shows all letters always when asked' do
-      Thing.paginate_alphabetically :by => :name, :show_all_letters => true
-      Thing.pagination_letters.should == ('A'..'Z').to_a
+    context 'collection provided' do
+      before :each do
+        @collection = %w(seven Eight Nine).map {|name| Thing.create!(:name => name)}
+      end
+
+      it 'picks out the correct letters from the set' do
+        Thing.pagination_letters(@collection).should == %w{E N S}
+      end
+
+      it 'shows all letters always when asked' do
+        Thing.paginate_alphabetically :by => :name, :show_all_letters => true
+        Thing.pagination_letters(@collection).should == ('A'..'Z').to_a
+      end
+    end
+
+    context 'no collection provided' do
+      it 'picks out the correct letters from the set' do
+        Thing.pagination_letters.should == ['F', 'O', 'S', 'T']
+      end
+
+      it 'shows all letters always when asked' do
+        Thing.paginate_alphabetically :by => :name, :show_all_letters => true
+        Thing.pagination_letters.should == ('A'..'Z').to_a
+      end
     end
   end
 

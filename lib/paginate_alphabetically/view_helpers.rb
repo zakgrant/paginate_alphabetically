@@ -5,7 +5,7 @@ module PaginateAlphabetically
         available_letters = PaginateAlphabetically::ALL_LETTERS
       else
         return "" if collection.empty?
-        available_letters = collection.first.class.pagination_letters
+        available_letters = collection.first.class.pagination_letters collection
       end
       content_tag(:ul, safe(alphabetical_links_to(available_letters)),
                   :class => options[:class] || "pagination")
